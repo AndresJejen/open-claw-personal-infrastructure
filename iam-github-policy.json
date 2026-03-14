@@ -93,7 +93,8 @@
         "arn:aws:ec2:us-east-1:*:subnet/*",
         "arn:aws:ec2:us-east-1:*:network-interface/*",
         "arn:aws:ec2:us-east-1:*:volume/*",
-        "arn:aws:ec2:us-east-1:*:security-group/*"
+        "arn:aws:ec2:us-east-1:*:security-group/*",
+        "arn:aws:ec2:us-east-1:*:instance/*"
       ]
     },
     {
@@ -122,6 +123,42 @@
         "iam:PassRole"
       ],
       "Resource": "arn:aws:iam::*:role/openclaw-*"
+    },
+    {
+      "Sid": "IAMInstanceProfile",
+      "Effect": "Allow",
+      "Action": [
+        "iam:CreateInstanceProfile",
+        "iam:DeleteInstanceProfile",
+        "iam:GetInstanceProfile",
+        "iam:AddRoleToInstanceProfile",
+        "iam:RemoveRoleFromInstanceProfile"
+      ],
+      "Resource": "arn:aws:iam::*:instance-profile/openclaw-*"
+    },
+    {
+      "Sid": "IAMAttachSSMPolicy",
+      "Effect": "Allow",
+      "Action": [
+        "iam:AttachRolePolicy",
+        "iam:DetachRolePolicy"
+      ],
+      "Resource": "arn:aws:iam::*:role/openclaw-*",
+      "Condition": {
+        "ArnEquals": {
+          "iam:PolicyArn": "arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore"
+        }
+      }
+    },
+    {
+      "Sid": "EC2InstanceProfile",
+      "Effect": "Allow",
+      "Action": [
+        "ec2:AssociateIamInstanceProfile",
+        "ec2:DisassociateIamInstanceProfile",
+        "ec2:DescribeIamInstanceProfileAssociations"
+      ],
+      "Resource": "*"
     },
     {
       "Sid": "EventBridgeScheduler",
